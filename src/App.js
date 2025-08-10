@@ -49,7 +49,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Simple Weather App</h1>
+      <h1>Weather Forecast</h1>
       <form onSubmit={handleSearch}>
         <input
           type="text"
