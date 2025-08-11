@@ -4,7 +4,6 @@
     border-radius: 16px;
     padding: 30px;
     width: 100%;
-    max-width: 350px;
     margin: 20px auto;
     box-shadow: 0 10px 20px var(--shadow-color);
     display: flex;
@@ -46,5 +45,27 @@
 
     100% {
         transform: scale(1);
+    }
+}
+
+/* * Media Query for mobile devices 
+ * Adjust the padding and font size for a better mobile experience
+ */
+@media (max-width: 500px) {
+    .weather-card {
+        padding: 20px;
+    }
+
+    .weather-card h2 {
+        font-size: 1.5em;
+    }
+
+    .weather-card p {
+        font-size: 1em;
+    }
+
+    .weather-card img {
+        width: 60px;
+        height: 60px;
     }
 }

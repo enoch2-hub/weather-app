@@ -17,15 +17,17 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
 }
 
 .App {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   padding: 20px;
   text-align: center;
+  box-sizing: border-box;
+  /* Ensures padding doesn't cause overflow */
 }
 
 h1 {
@@ -86,4 +88,28 @@ button:hover {
 .error {
   background-color: var(--error-color);
   color: white;
+}
+
+/* * Media Query for mobile devices 
+ * This CSS will only apply on screens with a width of 500px or less
+ */
+@media (max-width: 500px) {
+  h1 {
+    font-size: 2em;
+  }
+
+  form {
+    flex-direction: column;
+  }
+
+  input[type="text"],
+  button {
+    width: 100%;
+    border-radius: 8px;
+    margin: 5px 0;
+  }
+
+  button {
+    margin-top: 10px;
+  }
 }
