@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import WeatherCard from './components/WeatherCard';
 import './App.css';
 
-// Get API key from environment variable
-const API_KEY = process.env.REACT_APP_API_KEY; 
+const API_KEY = process.env.REACT_APP_API_KEY;
 const API_BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 function App() {
@@ -11,6 +10,24 @@ function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [themeClass, setThemeClass] = useState('theme-default');
+
+  const getThemeClass = (condition) => {
+    switch (condition) {
+      case 'Clear':
+        return 'theme-clear';
+      case 'Clouds':
+        return 'theme-clouds';
+      case 'Rain':
+      case 'Drizzle':
+      case 'Thunderstorm':
+        return 'theme-rain';
+      case 'Snow':
+        return 'theme-snow';
+      default:
+        return 'theme-default';
+    }
+  };
 
   const fetchWeather = async () => {
     if (!city) {
@@ -21,16 +38,18 @@ function App() {
     setLoading(true);
     setError(null);
     setWeatherData(null);
+    setThemeClass('theme-default'); // Reset theme when new search begins
 
     try {
       const response = await fetch(`${API_BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`);
-
+      
       if (!response.ok) {
         throw new Error('City not found. Please try again.');
       }
-
+      
       const data = await response.json();
       setWeatherData(data);
+      setThemeClass(getThemeClass(data.weather[0].main));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -48,8 +67,8 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Weather Forecast</h1>
+    <div className={`App ${themeClass}`}>
+      <h1>SkyCast</h1>
       <form onSubmit={handleSearch}>
         <input
           type="text"
@@ -59,10 +78,10 @@ function App() {
         />
         <button type="submit">Search</button>
       </form>
-
-      {loading && <p>Loading weather data...</p>}
+      
+      {loading && <p className="loading">Loading weather data...</p>}
       {error && <p className="error">{error}</p>}
-
+      
       <WeatherCard weatherData={weatherData} />
     </div>
   );

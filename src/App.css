@@ -19,7 +19,35 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
+  transition: background-color 0.5s ease-in-out;
 }
+
+.theme-default {
+  background-color: #f0f2f5;
+}
+
+.theme-clear {
+  background-color: #87ceeb;
+  /* Sky blue */
+}
+
+.theme-clouds {
+  background-color: #bdc3c7;
+  /* Cloudy gray */
+}
+
+.theme-rain {
+  background-color: #34495e;
+  /* Dark blue/gray */
+  color: #ecf0f1;
+  /* Light text for contrast */
+}
+
+.theme-snow {
+  background-color: #ecf0f1;
+  /* Snowy white */
+}
+
 
 .App {
   width: 100%;
