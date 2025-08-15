@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WeatherCard from './components/WeatherCard';
 import './App.css';
 
@@ -10,24 +10,6 @@ function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [themeClass, setThemeClass] = useState('theme-default');
-
-  const getThemeClass = (condition) => {
-    switch (condition) {
-      case 'Clear':
-        return 'theme-clear';
-      case 'Clouds':
-        return 'theme-clouds';
-      case 'Rain':
-      case 'Drizzle':
-      case 'Thunderstorm':
-        return 'theme-rain';
-      case 'Snow':
-        return 'theme-snow';
-      default:
-        return 'theme-default';
-    }
-  };
 
   const fetchWeather = async () => {
     if (!city) {
@@ -38,7 +20,10 @@ function App() {
     setLoading(true);
     setError(null);
     setWeatherData(null);
-    setThemeClass('theme-default'); // Reset theme when new search begins
+
+    // Get the body element to change its class
+    const body = document.body;
+    body.className = ''; // Reset class initially
 
     try {
       const response = await fetch(`${API_BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`);
@@ -49,9 +34,32 @@ function App() {
       
       const data = await response.json();
       setWeatherData(data);
-      setThemeClass(getThemeClass(data.weather[0].main));
+      
+      // Update body class based on weather condition
+      const condition = data.weather[0].main;
+      switch (condition) {
+        case 'Clear':
+          body.className = 'theme-clear';
+          break;
+        case 'Clouds':
+          body.className = 'theme-clouds';
+          break;
+        case 'Rain':
+        case 'Drizzle':
+        case 'Thunderstorm':
+          body.className = 'theme-rain';
+          break;
+        case 'Snow':
+          body.className = 'theme-snow';
+          break;
+        default:
+          body.className = 'theme-default';
+          break;
+      }
+
     } catch (err) {
       setError(err.message);
+      document.body.className = 'theme-default'; // Reset on error
     } finally {
       setLoading(false);
     }
@@ -66,8 +74,13 @@ function App() {
     fetchWeather();
   };
 
+  // Set a default theme when the app first loads
+  useEffect(() => {
+    document.body.className = 'theme-default';
+  }, []);
+
   return (
-    <div className={`App ${themeClass}`}>
+    <div className="App">
       <h1>SkyCast</h1>
       <form onSubmit={handleSearch}>
         <input
